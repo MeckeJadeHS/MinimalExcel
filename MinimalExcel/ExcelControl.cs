@@ -20,6 +20,11 @@ namespace MinimalExcel
             mySheet.Cells[2, "A"] = "1";
             mySheet.Cells[3, "A"] = "=A2+2";
 
+            var workSheet_range = mySheet.get_Range("A1", "B3");
+            workSheet_range.Borders[Excel.XlBordersIndex.xlEdgeBottom].Color = ConsoleColor.Green;
+			
+			// test KOmmentar
+
             // https://docs.microsoft.com/de-de/dotnet/csharp/programming-guide/interop/walkthrough-office-programming
 
             // Console.WriteLine("Excel App erzeugt!");
