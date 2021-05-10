@@ -11,23 +11,41 @@ namespace MinimalExcel
     {
         ExcelControl()
         {
+            // Objekt erzeugen
+            Console.WriteLine("Erzeuge Excel COM Objekt");
             Excel.Application excelApp = new Excel.Application();
             excelApp.Visible = true;
-            excelApp.Workbooks.Add();
 
-            Excel._Worksheet mySheet = (Excel.Worksheet) excelApp.ActiveSheet;
-            mySheet.Cells[1, "A"] = "Hallo Welt";
-            mySheet.Cells[2, "A"] = "1";
-            mySheet.Cells[3, "A"] = "=A2+2";
+            // Öffnen einer Excel Datei
+            Console.WriteLine("Öffne Datei");
+            String filename = "ExcelFile.xlsx";
+            String path = System.IO.Path.GetFullPath(filename);
+            if (System.IO.File.Exists(path))
+            {
+                excelApp.Workbooks.Open(path);
+            }
+            Excel._Worksheet mySheet = (Excel.Worksheet)excelApp.ActiveSheet;
 
-            var workSheet_range = mySheet.get_Range("A1", "B3");
-            workSheet_range.Borders[Excel.XlBordersIndex.xlEdgeBottom].Color = ConsoleColor.Green;
-			
-			// test KOmmentar
+            // Lesen der Datei
+            Console.WriteLine("Lese aus der Datei");
+            Excel.Range bereich = mySheet.Cells[1, "A"] as Excel.Range;
+            String zellWert = (String) bereich.Value;
+            Console.WriteLine("   Wert: " + zellWert);
 
-            // https://docs.microsoft.com/de-de/dotnet/csharp/programming-guide/interop/walkthrough-office-programming
+            Excel.Range workSheet_range = mySheet.get_Range("A1", "B3"); // Mehrere Zellen erhelten Sie auch so
 
-            // Console.WriteLine("Excel App erzeugt!");
+            // Schreiben in die Datei
+            Console.WriteLine("Schreibe in die Datei");
+            mySheet.Cells[1, "B"] = "Hallo Welt";
+            mySheet.Cells[2, "B"] = "1";
+            mySheet.Cells[3, "B"] = "=A2+2";
+
+            // Speichern der Datei und beenden.
+            Console.WriteLine("Speichern der Änderungen");
+            String newFileName = System.IO.Path.Combine(System.IO.Path.GetDirectoryName(path), "newExcelFile.xlsx");
+            mySheet.SaveAs(newFileName);
+            excelApp.Quit();
+
             // Console.ReadKey();
 
         }
